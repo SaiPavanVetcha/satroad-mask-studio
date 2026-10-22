@@ -35,12 +35,16 @@
 
 ```mermaid
 graph TD
-    Client[Next.js 15 + MapLibre GL UI] -->|POST /api/jobs| FastAPI[FastAPI Backend Engine]
-    FastAPI -->|Bhoonidhi STAC / Open Optical| SatModule[Satellite Engine (Bhoonidhi / S2)]
-    FastAPI -->|Overpass API (OSM)| OSMModule[Road Vector Extractor]
-    FastAPI -->|Job Polling GET /api/jobs/:id| Client
-    Client -->|Download GET /api/jobs/:id/roads.geojson| GeoJSON[GeoJSON Road Network]
-    Client -->|Download GET /api/jobs/:id/mask.tif| GeoTIFF[GeoTIFF Semantic Road Mask]
+    Client[Next.js + MapLibre GL UI] -->|POST /api/pipeline/run| FastAPI[FastAPI Backend Engine]
+    FastAPI -->|Bhoonidhi STAC / Sentinel-2| SatModule[Satellite Engine Bhoonidhi / S2]
+    FastAPI -->|Overpass API OSM| OSMModule[Road Vector Extractor]
+    SatModule --> GeoTIFF[GeoTIFF Satellite Raster]
+    OSMModule --> GeoJSON[Road Network GeoJSON]
+    GeoTIFF --> Rasterio[Rasterio Mask Synthesizer]
+    GeoJSON --> Rasterio
+    Rasterio --> MulticlassMask[Multi-Class GeoTIFF Mask]
+    Rasterio --> BinaryMask[Binary GeoTIFF Mask]
+    FastAPI -->|Job Results & Metrics| Client
 ```
 
 ---
