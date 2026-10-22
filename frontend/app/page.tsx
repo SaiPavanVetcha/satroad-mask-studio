@@ -1,10 +1,25 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import dynamic from "next/dynamic";
 import { Navbar } from "../components/Navbar";
 import { Sidebar } from "../components/Sidebar";
-import { MapComponent } from "../components/MapComponent";
 import { RoadHoverCard } from "../components/RoadHoverCard";
+
+const MapComponent = dynamic(
+  () => import("../components/MapComponent").then((mod) => mod.MapComponent),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="relative w-full h-full flex-1 flex flex-col items-center justify-center bg-slate-950 text-slate-400 gap-3">
+        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
+        <span className="text-xs font-semibold tracking-wider uppercase text-cyan-300">
+          Initializing Map Engine...
+        </span>
+      </div>
+    ),
+  }
+);
 import { PasteGeoJsonModal } from "../components/PasteGeoJsonModal";
 import { StatusModal } from "../components/StatusModal";
 import {

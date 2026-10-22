@@ -35,43 +35,42 @@
 
 ```mermaid
 graph TD
-    Client[Next.js + MapLibre GL UI] -->|POST /api/pipeline/run| FastAPI[FastAPI Backend Engine]
-    FastAPI -->|Bhoonidhi STAC / Sentinel-2| SatModule[Satellite Engine (Bhoonidhi / S2)]
+    Client[Next.js 15 + MapLibre GL UI] -->|POST /api/jobs| FastAPI[FastAPI Backend Engine]
+    FastAPI -->|Bhoonidhi STAC / Open Optical| SatModule[Satellite Engine (Bhoonidhi / S2)]
     FastAPI -->|Overpass API (OSM)| OSMModule[Road Vector Extractor]
-    SatModule --> GeoTIFF[GeoTIFF Satellite Raster]
-    OSMModule --> GeoJSON[Road Network GeoJSON]
-    GeoTIFF & GeoJSON --> Rasterio[Rasterio Mask Synthesizer]
-    Rasterio --> MulticlassMask[Multi-Class GeoTIFF Mask]
-    Rasterio --> BinaryMask[Binary GeoTIFF Mask]
-    FastAPI -->|Job Results & Metrics| Client
+    FastAPI -->|Job Polling GET /api/jobs/:id| Client
+    Client -->|Download GET /api/jobs/:id/roads.geojson| GeoJSON[GeoJSON Road Network]
+    Client -->|Download GET /api/jobs/:id/mask.tif| GeoTIFF[GeoTIFF Semantic Road Mask]
 ```
 
 ---
 
 ## 🚀 Getting Started
-
+ 
 ### 1. Prerequisites
-- Python 3.10+ (tested with 3.12)
-- Node.js 18+ & npm
-- GDAL / Rasterio native libraries (auto-bundled in pip wheels)
-
+- **Python 3.10+** (tested with Python 3.12)
+- **Node.js 18+ & npm**
+- Fully functional out of the box with **free open services** (OpenStreetMap Overpass API + Carto / OpenFreeMap basemaps). Bhoonidhi credentials are optional.
+ 
 ### 2. Backend Setup
-From the project root:
+From the repository root:
 ```bash
-# Create virtual environment (if not already created)
+# 1. Create and activate a Python virtual environment
 python -m venv .venv
 
-# Activate on Windows PowerShell:
+# On Windows PowerShell:
 .\.venv\Scripts\Activate.ps1
-# Or on Linux / macOS:
+# On Linux / macOS:
 # source .venv/bin/activate
 
-# Install dependencies and start server
+# 2. Install backend dependencies
 pip install -r backend/requirements.txt
+
+# 3. Start the FastAPI backend server
 cd backend
 python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
-The FastAPI backend will start at `http://localhost:8000` with interactive Swagger docs at `http://localhost:8000/docs`.
+The FastAPI backend runs at `http://localhost:8000` with interactive Swagger docs at `http://localhost:8000/docs`.
 
 ### 3. Frontend Setup
 In a new terminal window:
@@ -88,13 +87,11 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Endpoint | Method | Description |
 |---|---|---|
-| `/api/health` | `GET` | Health check and Bhoonidhi / Overpass connection status |
-| `/api/pipeline/run` | `POST` | Execute end-to-end satellite & road pipeline for an AOI |
-| `/api/pipeline/jobs/{job_id}` | `GET` | Retrieve cached job result, road vectors, and metadata |
-| `/api/pipeline/jobs/{job_id}/geojson` | `GET` | Download raw road network as GeoJSON |
-| `/api/pipeline/jobs/{job_id}/mask` | `GET` | Download synthesized GeoTIFF road mask (`?binary=false` or `?binary=true`) |
-| `/api/pipeline/jobs/{job_id}/satellite` | `GET` | Download raw satellite GeoTIFF raster |
-| `/api/bhoonidhi/settings` | `GET`/`POST` | Query or update Bhoonidhi credentials & STAC endpoint |
+| `/api/health` | `GET` | Health check, Bhoonidhi configuration status, and Overpass endpoint |
+| `/api/jobs` | `POST` | Submit an Area of Interest (AOI bbox or polygon) for background extraction |
+| `/api/jobs/{job_id}` | `GET` | Poll progress & status; returns classified road GeoJSON upon completion |
+| `/api/jobs/{job_id}/roads.geojson` | `GET` | Download extracted road network as GeoJSON |
+| `/api/jobs/{job_id}/mask.tif` | `GET` | Generate & download georeferenced GeoTIFF mask (`?binary=false` or `?binary=true`) |
 
 ---
 
