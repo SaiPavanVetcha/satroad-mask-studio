@@ -22,12 +22,12 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -36,7 +36,16 @@ MANIFEST
 venv/
 ENV/
 env/
+.env/
 .python-version
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Only ignore Python virtualenv lib folders (DO NOT ignore frontend/lib)
+**/.venv/lib/
+**/venv/lib/
+**/ENV/lib/
+**/env/lib/
 
 # =========================
 # Next.js
@@ -44,12 +53,14 @@ env/
 .next/
 out/
 build/
+.swc/
 
 # =========================
 # Testing & Coverage
 # =========================
 /coverage
 .coverage
+.coverage.*
 htmlcov/
 .tox/
 .nox/
@@ -58,6 +69,8 @@ htmlcov/
 .ruff_cache/
 .dmypy.json
 dmypy.json
+.pytype/
+.cython_debug/
 
 # =========================
 # Environment & Secrets
@@ -65,16 +78,21 @@ dmypy.json
 .env
 .env.*
 !.env.example
+!.env*.example
 *.pem
 *.key
 credentials.json
 secrets/
+*.secret
 
 # =========================
 # OS / Editor
 # =========================
 .DS_Store
+.DS_Store?
 Thumbs.db
+ehthumbs.db
+Desktop.ini
 *.swp
 *.swo
 *~
@@ -84,6 +102,8 @@ Thumbs.db
 .project
 .classpath
 .settings/
+*.sublime-workspace
+*.sublime-project
 
 # =========================
 # Logs & Debug
@@ -94,6 +114,7 @@ yarn-error.log*
 .pnpm-debug.log*
 *.log
 logs/
+lerna-debug.log*
 
 # =========================
 # Backend / FastAPI specific
@@ -104,32 +125,38 @@ logs/
 tmp/
 temp/
 .temp/
+*.pid
 
 # =========================
-# Geospatial / Project data (generated)
+# Geospatial / Project data (generated at runtime)
 # =========================
-# Downloaded satellite imagery & processed outputs
 data/
 downloads/
 outputs/
 jobs/
 cache/
+storage/
 *.tif
 *.tiff
 *.geotiff
 *.geojson
-!**/fixtures/**/*.geojson   # keep test fixtures if any
+!**/fixtures/**/*.geojson
+!**/test/**/*.geojson
 *.shp
 *.shx
 *.dbf
 *.prj
 *.cpg
 *.zip
+*.gpkg
+*.mbtiles
+*.pmtiles
 
 # =========================
 # Vercel / Deployment
 # =========================
 .vercel
+.netlify
 
 # =========================
 # TypeScript
@@ -142,4 +169,8 @@ next-env.d.ts
 # =========================
 *.bak
 *.tmp
-.DS_Store?
+*.temp
+*.orig
+*.rej
+.Spotlight-V100
+.Trashes
