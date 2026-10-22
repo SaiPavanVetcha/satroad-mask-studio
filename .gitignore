@@ -1,0 +1,145 @@
+# =========================
+# Dependencies
+# =========================
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# =========================
+# Next.js
+# =========================
+.next/
+out/
+build/
+
+# =========================
+# Testing & Coverage
+# =========================
+/coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+secrets/
+
+# =========================
+# OS / Editor
+# =========================
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+.project
+.classpath
+.settings/
+
+# =========================
+# Logs & Debug
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+logs/
+
+# =========================
+# Backend / FastAPI specific
+# =========================
+*.db
+*.sqlite3
+.cache/
+tmp/
+temp/
+.temp/
+
+# =========================
+# Geospatial / Project data (generated)
+# =========================
+# Downloaded satellite imagery & processed outputs
+data/
+downloads/
+outputs/
+jobs/
+cache/
+*.tif
+*.tiff
+*.geotiff
+*.geojson
+!**/fixtures/**/*.geojson   # keep test fixtures if any
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.zip
+
+# =========================
+# Vercel / Deployment
+# =========================
+.vercel
+
+# =========================
+# TypeScript
+# =========================
+*.tsbuildinfo
+next-env.d.ts
+
+# =========================
+# Misc
+# =========================
+*.bak
+*.tmp
+.DS_Store?
